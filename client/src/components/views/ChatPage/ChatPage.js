@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 //https://stackoverflow.com/questions/52511869/typeerror-object-is-not-a-function-with-react-table-and-moment-js
 import  moment  from 'moment';
 
+import { getChats } from '../../../_actions/chat_actions';
+
 class ChatPage extends Component {
     state = {
         chatMessage: ""
@@ -12,6 +14,8 @@ class ChatPage extends Component {
 
     componentDidMount(){
         const server = "http://localhost:5000";
+
+        this.props.dispatch(getChats());
 
         this.socket = io(server);
 
