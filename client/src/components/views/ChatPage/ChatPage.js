@@ -7,9 +7,12 @@ import  moment  from 'moment';
 
 import { getChats } from '../../../_actions/chat_actions';
 
+import ChatCard from './ChatCard';
+
 class ChatPage extends Component {
     state = {
-        chatMessage: ""
+        chatMessage: "",
+        showMessage: "",
     }
 
     componentDidMount(){
@@ -22,6 +25,7 @@ class ChatPage extends Component {
         this.socket.on("Output Chat Message", messageFromBackend => {
             console.log("data about sender from backend", messageFromBackend);
         })
+
     }
 
     // handle the change in the user input for handling the chat messages
@@ -31,9 +35,20 @@ class ChatPage extends Component {
         });
     }
 
+    renderMessages = () => {
+        this.props.chat.chats && this.props.chat.chats.foreach((chat) => {
+            return <ChatCard key={chat._id} {...chat} />
+        })
+    }
+
     // method to send the user message
     sendMessage = (e) => {
         e.preventDefault();
+
+        if (!this.state.chatMessage){
+            alert("Please type something to send");
+            return;
+        }
 
         let dataToSend = {
              message: this.state.chatMessage,
@@ -41,7 +56,7 @@ class ChatPage extends Component {
              userName: this.props.user.userData.name,
              userImage: this.props.user.userData.image,
              nowTime: moment(),
-             type: "Image",
+             type: "Text",
         }
 
         this.socket.emit("Send new message", {
@@ -59,6 +74,9 @@ class ChatPage extends Component {
                 </div>
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     <div className="infinite-container">
+                        {this.props.chat && (
+                            <div>{this.renderMessages}</div>
+                        )}
                         <div 
                             ref={el => {
                                 this.messagesEnd = el;
@@ -96,8 +114,9 @@ class ChatPage extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.user
+        user: state.user,
+        chat: state.chat
     }
-}
+};
 
 export default connect(mapStateToProps)(ChatPage);
