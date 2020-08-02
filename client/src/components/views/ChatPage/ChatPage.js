@@ -36,9 +36,9 @@ class ChatPage extends Component {
     }
 
     renderMessages = () => {
-        this.props.chat.chats && this.props.chat.chats.foreach((chat) => {
-            return <ChatCard key={chat._id} {...chat} />
-        })
+        this.props.chat.chats && this.props.chat.chats.map(chat => (
+            <ChatCard />
+        ));
     }
 
     // method to send the user message
