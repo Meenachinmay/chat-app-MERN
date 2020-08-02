@@ -18,7 +18,7 @@ class ChatPage extends Component {
     componentDidMount(){
         const server = "http://localhost:5000";
 
-        this.props.dispatch(getChats());
+        this.props.getChats();
 
         this.socket = io(server);
 
@@ -33,12 +33,6 @@ class ChatPage extends Component {
         this.setState({
             chatMessage: e.target.value 
         });
-    }
-
-    renderMessages = () => {
-        this.props.chat.chats && this.props.chat.chats.map(chat => (
-            <ChatCard />
-        ));
     }
 
     // method to send the user message
@@ -74,9 +68,7 @@ class ChatPage extends Component {
                 </div>
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     <div className="infinite-container">
-                        {this.props.chat && (
-                            <div>{this.renderMessages}</div>
-                        )}
+                        <ChatCard chats={this.props.chat.chat_messages} />
                         <div 
                             ref={el => {
                                 this.messagesEnd = el;
@@ -112,11 +104,9 @@ class ChatPage extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.user,
-        chat: state.chat
-    }
-};
+const mapStateToProps = (state) => ({
+    user: state.user,
+    chat: state.chat
+})
 
-export default connect(mapStateToProps)(ChatPage);
+export default connect(mapStateToProps, {getChats})(ChatPage);
