@@ -1,9 +1,13 @@
 import { GET_CHATS } from '../_actions/types';
 
-export default function(state = {}, action) {
+const initialState = {
+    chatMessages: []
+}
+
+export default function(state = initialState, action) {
     switch(action.type){
         case GET_CHATS:
-            return { ...state, chat_messages: action.payload }
+            return { ...state, chatMessages: action.payload }
         default:
             return state;
     }

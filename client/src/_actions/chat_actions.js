@@ -9,7 +9,7 @@ export const getChats = () => dispatch => {
         .then(response => {
             dispatch({
                 type: GET_CHATS,
-                payload: response.data
+                payload: response.data.messages
             })
            
         });

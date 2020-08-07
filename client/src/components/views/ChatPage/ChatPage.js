@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button, Row, Col } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, message } from 'antd';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
 //https://stackoverflow.com/questions/52511869/typeerror-object-is-not-a-function-with-react-table-and-moment-js
@@ -68,7 +68,6 @@ class ChatPage extends Component {
                 </div>
                 <div style={{ maxWidth: '800px', margin: '0 auto' }}>
                     <div className="infinite-container">
-                        <ChatCard chats={this.props.chat.chat_messages} />
                         <div 
                             ref={el => {
                                 this.messagesEnd = el;
@@ -97,6 +96,9 @@ class ChatPage extends Component {
                                 </Button>
                             </Col>
                         </Form>
+                        {this.props.chat.map(message => (
+                            <ChatCard key={message._id} message={message} />
+                        ))}
                     </Row>
                 </div>
             </React.Fragment>
@@ -106,7 +108,7 @@ class ChatPage extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    chat: state.chat
+    chat: state.chat.chatMessages
 })
 
 export default connect(mapStateToProps, {getChats})(ChatPage);
